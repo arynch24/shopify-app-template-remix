@@ -1,0 +1,35 @@
+<div 
+  id="review-widget" 
+  data-product-id="{{ product.id }}" 
+  data-product-handle="{{ product.handle }}"
+  data-shop="{{ shop.permanent_domain }}"
+  style="
+    --color: {{ block.settings.primary_color }};
+    --font-size: {{ block.settings.font_size }};
+  "
+>here i am hahahhaha </div>
+
+<script src={{ 'embed.js' | asset_url }} defer></script>
+
+{% schema %}
+{
+  "name": "Review Widget",
+  "target": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "primary_color",
+      "label": "Primary Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size (px)",
+      "min": 12,
+      "max": 24,
+      "default": 16
+    }
+  ]
+}
+{% endschema %}
