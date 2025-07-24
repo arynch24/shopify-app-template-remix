@@ -1,7 +1,7 @@
 // app/routes/api/reviews.ts
 import { json } from '@remix-run/node';
 import type { LoaderFunction, ActionFunction } from '@remix-run/node';
-import prisma from '../../db.server';
+import prisma from '../db.server';
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);

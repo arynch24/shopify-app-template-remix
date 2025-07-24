@@ -3,7 +3,7 @@
 client_id = "d73ce3a561b2b0a36cdd9beb041e8832"
 name = "sticky-add-to-cart"
 handle = "sticky-add-to-cart-41"
-application_url = "https://query-card-contractors-clearance.trycloudflare.com"
+application_url = "https://loan-supports-belief-advertisements.trycloudflare.com"
 embedded = true
 
 [build]
@@ -26,7 +26,7 @@ api_version = "2025-07"
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://query-card-contractors-clearance.trycloudflare.com/auth/callback", "https://query-card-contractors-clearance.trycloudflare.com/auth/shopify/callback", "https://query-card-contractors-clearance.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://loan-supports-belief-advertisements.trycloudflare.com/auth/callback", "https://loan-supports-belief-advertisements.trycloudflare.com/auth/shopify/callback", "https://loan-supports-belief-advertisements.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

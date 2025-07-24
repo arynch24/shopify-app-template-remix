@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const shop = widget.dataset.shop;
 
   // Fetch reviews
-  const res = await fetch(`/apps/reviews?shop=${shop}&product=${productId}`);
+  const res = await fetch(`/apps/my-app?shop=${shop}&product=${productId}`);
   const { reviews } = await res.json();
 
   const container = document.createElement("div");
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   form.onsubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
-    await fetch("/apps/reviews", {
+    await fetch("/apps/my-app", {
       method: "POST",
       body: JSON.stringify({
         productId,
