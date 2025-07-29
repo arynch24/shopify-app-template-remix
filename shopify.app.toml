@@ -3,7 +3,7 @@
 client_id = "d73ce3a561b2b0a36cdd9beb041e8832"
 name = "sticky-add-to-cart"
 handle = "sticky-add-to-cart-41"
-application_url = "https://rising-heather-mandatory-results.trycloudflare.com"
+application_url = "https://perspective-domain-eu-joyce.trycloudflare.com"
 embedded = true
 
 [build]
@@ -26,7 +26,7 @@ api_version = "2025-07"
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://rising-heather-mandatory-results.trycloudflare.com/auth/callback", "https://rising-heather-mandatory-results.trycloudflare.com/auth/shopify/callback", "https://rising-heather-mandatory-results.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://perspective-domain-eu-joyce.trycloudflare.com/auth/callback", "https://perspective-domain-eu-joyce.trycloudflare.com/auth/shopify/callback", "https://perspective-domain-eu-joyce.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

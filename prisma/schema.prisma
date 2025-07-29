@@ -37,6 +37,8 @@ model Review {
   productId String
   author    String
   content   String
+  rating    Int      @default(0)
+  email     String?
   createdAt DateTime @default(now())
 }
 
