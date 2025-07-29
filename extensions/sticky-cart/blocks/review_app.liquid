@@ -1,15 +1,11 @@
-<div 
-  id="review-widget" 
-  data-product-id="{{ product.id }}" 
-  data-product-handle="{{ product.handle }}"
+<div
+  id="review-widget"
   data-shop="{{ shop.permanent_domain }}"
-  style="
-    color: {{ block.settings.primary_color }};
-    font-size: {{ block.settings.font_size }}px;
-  "
->here i am hahahhaha </div>
-
-<script src={{ 'embed.js' | asset_url }} defer></script>
+  data-product-id="{{ product.id }}"
+>
+  Loading reviews...
+</div>
+<script src="{{ 'embed.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
@@ -17,18 +13,34 @@
   "target": "section",
   "settings": [
     {
-      "type": "color",
-      "id": "primary_color",
-      "label": "Primary Color",
-      "default": "#000000"
+      "type": "text",
+      "id": "widget_title",
+      "default": "Customer Reviews",
+      "label": "Widget Title"
     },
     {
-      "type": "range",
-      "id": "font_size",
-      "label": "Font Size (px)",
-      "min": 12,
-      "max": 80,
-      "default": 16
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": true,
+      "label": "Show Average Rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_review_count",
+      "default": true,
+      "label": "Show Review Count"
+    },
+    {
+      "type": "color",
+      "id": "widget_bg_color",
+      "default": "#f9f9f9",
+      "label": "Widget Background Color"
+    },
+    {
+      "type": "color",
+      "id": "widget_text_color",
+      "default": "#333333",
+      "label": "Widget Text Color"
     }
   ]
 }

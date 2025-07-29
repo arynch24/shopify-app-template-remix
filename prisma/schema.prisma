@@ -39,3 +39,11 @@ model Review {
   content   String
   createdAt DateTime @default(now())
 }
+
+model ShopSetting {
+  id           String   @id @default(cuid())
+  shop         String   @unique
+  primaryColor String
+  fontSize     Int
+  updatedAt    DateTime @updatedAt
+}
