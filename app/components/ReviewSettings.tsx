@@ -12,13 +12,15 @@ import {
     Tooltip,
     ColorPicker,
     hsbToHex,
-    Popover,
-    Button,
-    Banner
+    Popover
 } from '@shopify/polaris';
+import { SaveBar } from '@shopify/app-bridge-react';
+import { useAppBridge } from '@shopify/app-bridge-react';
 import { QuestionCircleIcon } from '@shopify/polaris-icons';
 
 export default function SettingsComponent() {
+    const shopify = useAppBridge();
+    
     // Form state
     const [selectedWidget, setSelectedWidget] = useState(['reviews-widget']);
     const [starShape, setStarShape] = useState('pointed');
@@ -32,7 +34,6 @@ export default function SettingsComponent() {
     // Save state management
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [saveStatus, setSaveStatus] = useState<string|null>(null);
     
     // Original values for comparison
     const [originalValues, setOriginalValues] = useState({
@@ -57,7 +58,14 @@ export default function SettingsComponent() {
 
         const hasChanges = JSON.stringify(currentValues) !== JSON.stringify(originalValues);
         setHasUnsavedChanges(hasChanges);
-    }, [selectedWidget, starShape, starColor, sortOrder, maxReviews, excerptLength, originalValues]);
+        
+        // Show/hide save bar based on changes
+        if (hasChanges) {
+            shopify.saveBar.show('settings-save-bar');
+        } else {
+            shopify.saveBar.hide('settings-save-bar');
+        }
+    }, [selectedWidget, starShape, starColor, sortOrder, maxReviews, excerptLength, originalValues, shopify.saveBar]);
 
     // Check for changes whenever state updates
     useEffect(() => {
@@ -68,7 +76,6 @@ export default function SettingsComponent() {
     const saveSettings = async () => {
         try {
             setIsSaving(true);
-            setSaveStatus(null);
 
             // Simulate API call - replace with your actual API endpoint
             const response = await new Promise((resolve) => {
@@ -114,17 +121,18 @@ export default function SettingsComponent() {
             });
 
             setHasUnsavedChanges(false);
-            setSaveStatus('success');
             
-            // Clear success message after 3 seconds
-            setTimeout(() => setSaveStatus(null), 3000);
+            // Hide save bar after successful save
+            shopify.saveBar.hide('settings-save-bar');
+            
+            // Show success toast
+            shopify.toast.show('Settings saved successfully!');
 
         } catch (error) {
             console.error('Save error:', error);
-            setSaveStatus('error');
             
-            // Clear error message after 5 seconds
-            setTimeout(() => setSaveStatus(null), 5000);
+            // Show error toast
+            shopify.toast.show('Failed to save settings. Please try again.', { isError: true });
         } finally {
             setIsSaving(false);
         }
@@ -147,8 +155,10 @@ export default function SettingsComponent() {
         setColorHex(hsbToHex(originalValues.starColor));
         
         setHasUnsavedChanges(false);
-        setSaveStatus(null);
-    }, [originalValues]);
+        
+        // Hide save bar after discard
+        shopify.saveBar.hide('settings-save-bar');
+    }, [originalValues, shopify.saveBar]);
 
     const handleWidgetChange = useCallback((selected:any) => {
         setSelectedWidget(selected);
@@ -226,46 +236,6 @@ export default function SettingsComponent() {
         { label: 'Lowest rating first', value: 'lowest' }
     ];
 
-    const renderSaveBar = () => {
-        if (!hasUnsavedChanges) return null;
-
-        return (
-            <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: '#f6f6f7',
-                borderBottom: '1px solid #e1e3e5',
-                padding: '12px 16px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                zIndex: 1000,
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}>
-                <Text variant="bodyMd" as="span">
-                    You have unsaved changes
-                </Text>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button
-                        onClick={handleDiscard}
-                        disabled={isSaving}
-                    >
-                        Discard
-                    </Button>
-                    <Button
-                        variant="primary"
-                        onClick={handleSave}
-                        loading={isSaving}
-                    >
-                        Save
-                    </Button>
-                </div>
-            </div>
-        );
-    };
-
     const renderSidebar = () => (
         <div style={{ width: '260px', height: '100vh' }}>
             <Card padding="200">
@@ -335,17 +305,6 @@ export default function SettingsComponent() {
             return (
                 <Layout>
                     <Layout.Section>
-                        {saveStatus === 'success' && (
-                            <Banner tone="success" onDismiss={() => setSaveStatus(null)}>
-                                Settings saved successfully!
-                            </Banner>
-                        )}
-                        {saveStatus === 'error' && (
-                            <Banner tone="critical" onDismiss={() => setSaveStatus(null)}>
-                                Failed to save settings. Please try again.
-                            </Banner>
-                        )}
-                        
                         <Card>
                             <Text variant="headingLg" as="h2">General</Text>
                             <Box>
@@ -464,15 +423,17 @@ export default function SettingsComponent() {
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh' }}>
-            {renderSaveBar()}
+            {/* Shopify App Bridge SaveBar */}
+            <SaveBar id="settings-save-bar" discardConfirmation>
+                <button variant="primary" onClick={handleSave} disabled={isSaving} loading={isSaving ? "" : undefined}>
+                    Save
+                </button>
+                <button onClick={handleDiscard} disabled={isSaving}>
+                    Discard
+                </button>
+            </SaveBar>
             
-            {/* Main content with top padding when save bar is visible */}
-            <div style={{ 
-                display: 'flex', 
-                width: '100%',
-                paddingTop: hasUnsavedChanges ? '60px' : '0',
-                transition: 'padding-top 0.2s ease'
-            }}>
+            <div style={{ display: 'flex', width: '100%' }}>
                 {renderSidebar()}
                 
                 <div style={{ flex: 1, paddingLeft: '12px' }}>
